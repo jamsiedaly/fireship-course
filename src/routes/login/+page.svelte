@@ -20,7 +20,7 @@
         <button class="btn btn-primary">Sign in with Google</button>
     </form>
 {:else}
-    <h2 class="card-title">Welcome, {data.session.user.email}</h2>
+    <h2 class="card-title">Welcome {data.session.user.email}</h2>
     <p class="text-center text-success">You are logged in</p>
     <a href="/login/username"><button class="btn btn-primary">continue</button> </a>
     <button class="btn btn-warning" on:click={handleSignOut}>Sign out</button>

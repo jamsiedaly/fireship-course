@@ -16,10 +16,8 @@
                 invalidate('supabase:auth')
             }
         })
-        console.log(session)
 
         return () => subscription.unsubscribe()
-
     });
 </script>
 
