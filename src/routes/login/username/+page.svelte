@@ -1,18 +1,45 @@
-<script>
+<script lang="ts">
     import AuthCheck from "$lib/components/AuthCheck.svelte";
+    import {supabase} from "../../../lib/supabaseClient";
     export let data;
 
     let username = "";
     let loading = false;
     let isAvailable = false;
 
+    let debounceTimer: NodeJS.Timeout;
+
     async function checkAvailability() {
+        isAvailable = false;
+        loading = true;
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(async () => {
+            supabase.from('users').select('name').eq('name', username).then(({data, error}) => {
+                if (error) {
+                    return;
+                } else {
+                    console.log(data);
+                    isAvailable = true;
+                }
+            });
+            loading = false;
+        }, 500);
 
     }
 
     async function confirmUsername() {
-        // TODO
+        if (!loading && isAvailable) {
+            supabase.from('users').insert({'email': data.session.user.email, 'name': username}).then(({data, error}) => {
+                if (error) {
+                    return;
+                } else {
+                    console.log(data);
+                }
+            });
+        }
     }
+
 </script>
 
 <AuthCheck data={data}>
